@@ -1,0 +1,42 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <h1>All Posts</h1>
+    {% if user.is_authenticated %}
+        {% for tweet in pages %}
+            <div class="posts" style="padding: 20px; margin: 10px; border: 1px solid #ccc;">
+                <h5> {{tweet.user}} </h2>
+                <p style="margin: 5px 0;"> {{tweet.text}} </p>
+                <p style="margin: 5px 0;"> {{tweet.date}} </p>
+                <p style="margin: 5px 0;">❤️ {{tweet.likes}} </p>
+            </div>
+        {% endfor %}
+        <nav aria-label="..." style="margin-top: 70px;"></nav>
+            <ul class="pagination d-flex justify-content-center">
+                {% if pages.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ pages.previous_page_number }}" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#"> {{pages.number}}  <span class="sr-only"></span></a>
+                </li>
+
+                {% if pages.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ pages.next_page_number }}" tabindex="-1" aria-disabled="true">Next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}

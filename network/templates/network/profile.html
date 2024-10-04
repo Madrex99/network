@@ -1,0 +1,63 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <h1> {{user}} </h1>
+    {% if user.is_authenticated %}
+        <div class="profile-follow">
+            <div class="row d-flex justify-content-center">
+                <h3 class="col-2">Followers: {{followers}} </h3>
+                <h3 class="col-2">Following: {{following}} </h3>
+            </div>
+            {% if button == "yes" %}
+                <div class="row d-flex justify-content-center" style="margin-right: 100px; margin-top: 50px; ">
+                    {% if follow == "no" %}
+                        <form action="{% url 'follow' profile_id=user.id %}" method="post">
+                            {%csrf_token%}
+                            <input value="Follow" class="btn btn-primary" type="submit">
+                        </form>
+                    {% elif follow == "yes" %}
+                        <form action="{% url 'unfollow' profile_id=user.id %}" method="post">
+                            {%csrf_token%}
+                            <input value="Unfollow" class="btn btn-primary" type="submit">
+                        </form>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        {% for tweet in pages %}
+            <div class="posts" style="padding: 20px; margin: 10px; border: 1px solid #ccc;">
+                <h5> {{tweet.user}} </h2>
+                <p style="margin: 5px 0;"> {{tweet.text}} </p>
+                <p style="margin: 5px 0;"> {{tweet.date}} </p>
+                <p style="margin: 5px 0;">❤️ {{tweet.likes}} </p>
+            </div>
+        {% endfor %}
+        <nav aria-label="..." style="margin-top: 70px;"></nav>
+            <ul class="pagination d-flex justify-content-center">
+                {% if pages.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ pages.previous_page_number }}" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#"> {{pages.number}}  <span class="sr-only"></span></a>
+                </li>
+
+                {% if pages.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ pages.next_page_number }}" tabindex="-1" aria-disabled="true">Next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}
